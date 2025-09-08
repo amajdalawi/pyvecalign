@@ -20,7 +20,7 @@ from ast import literal_eval
 from collections import OrderedDict
 from math import ceil
 from time import time
-
+import torch
 import numpy as np
 
 import pyximport
@@ -53,6 +53,7 @@ def read_in_embeddings(text_file, embed_file):
        make a maping from candidate sentence to embedding index, 
        and a numpy array of the embeddings
     """
+    print(f"Text file currently is : {text_file} and embed file is: {embed_file}")
     sent2line = dict()
     with open(text_file, 'rt', encoding="utf-8") as fin:
         for ii, line in enumerate(fin):
@@ -77,7 +78,7 @@ def make_doc_embedding(sent2line, line_embeddings, lines, num_overlaps):
     lines: sentences in input document to embed
     sent2line, line_embeddings: precomputed embeddings for lines (and overlaps of lines)
     """
-
+    # print(f"num of overlaps is: {num_overlaps}")
     lines = [preprocess_line(line) for line in lines]
 
     vecsize = line_embeddings.shape[1]
@@ -86,6 +87,7 @@ def make_doc_embedding(sent2line, line_embeddings, lines, num_overlaps):
 
     for ii, overlap in enumerate(range(1, num_overlaps + 1)):
         for jj, out_line in enumerate(layer(lines, overlap)):
+            # print(f"outline: {out_line}")
             try:
                 line_id = sent2line[out_line]
             except KeyError:
@@ -315,6 +317,112 @@ def dense_traceback(x_y_tb):
     alignments.reverse()
 
     return alignments
+
+
+# dp_utils.py
+# def build_embed_index_from_memory(lines, model, num_overlaps,
+#                                   batch_size=256, device="cuda", normalize=True):
+#     # generate unique overlap strings
+#     lines = [preprocess_line(l) for l in lines]
+#     overlap_strings = sorted(set(yield_overlaps(lines, num_overlaps)))
+
+#     # One big GPU tensor out; convert only once
+#     with torch.inference_mode():
+#         embs = model.encode(
+#             overlap_strings,
+#             batch_size=batch_size,
+#             device=device,                 # <<< ensures GPU
+#             convert_to_tensor=True,        # <<< returns a single GPU tensor
+#             normalize_embeddings=True      # do cosine-norm in the model
+#         )
+
+#     # Single transfer to CPU + float32 numpy
+#     embs = embs.to(dtype=torch.float32, device="cpu").numpy()
+
+#     if not normalize:
+#         # (usually not needed, but keep for completeness)
+#         norms = np.linalg.norm(embs, axis=1, keepdims=True) + 1e-12
+#         embs = embs / norms
+
+#     sent2line = {s: i for i, s in enumerate(overlap_strings)}
+#     return sent2line, embs.astype(np.float32, copy=False)
+
+
+def build_embed_index_from_memory(lines, model, num_overlaps,
+                                  batch_size=256, device=None, normalize=True):
+    lines = [preprocess_line(l) for l in lines]
+    overlap_strings = sorted(set(yield_overlaps(lines, num_overlaps)))
+
+    # Ask for GPU use when the backend supports it; harmless for ONNX wrapper
+    encode_kwargs = {"batch_size": batch_size}
+    if device is not None:
+        encode_kwargs["device"] = device
+    # Ask for normalization in the model if it supports it
+    encode_kwargs["normalize_embeddings"] = True
+    # For SentenceTransformers this returns a torch.Tensor; for ONNX wrapper it returns np.ndarray
+    try:
+        encode_kwargs["convert_to_tensor"] = True     # ST supports; ONNX wrapper ignores extra kw
+    except TypeError:
+        pass
+
+    embs = model.encode(overlap_strings, **encode_kwargs)
+
+    # Convert to numpy float32 regardless of backend
+    try:
+        import torch
+        if isinstance(embs, torch.Tensor):
+            embs = embs.to(dtype=torch.float32, device="cpu").numpy()
+        else:
+            embs = np.asarray(embs, dtype=np.float32)
+    except Exception:
+        embs = np.asarray(embs, dtype=np.float32)
+
+    if normalize:
+        # If the model didn’t normalize for us, ensure unit length
+        norms = np.linalg.norm(embs, axis=1, keepdims=True) + 1e-12
+        # Only renormalize if clearly not unit vectors (saves time)
+        if not np.allclose(norms, 1.0, atol=1e-3):
+            embs = embs / norms
+
+    sent2line = {s: i for i, s in enumerate(overlap_strings)}
+    return sent2line, embs
+
+# def build_embed_index_from_memory(lines, model, num_overlaps, batch_size=256, normalize=True):
+#     """
+#     Build (sent2line, line_embeddings) directly from lists of lines in memory,
+#     using a multilingual embedding model (e.g., SentenceTransformers).
+#     This mirrors read_in_embeddings(...) but never touches disk.
+
+#     Returns:
+#         sent2line: dict[str -> int], exact overlap string -> row in line_embeddings
+#         line_embeddings: np.ndarray [num_unique_overlaps, dim], float32
+#     """
+#     # Generate all overlapping strings we might need
+#     lines = [preprocess_line(l) for l in lines]
+#     uniq = set(yield_overlaps(lines, num_overlaps))  # includes singles, pairs, ...
+#     # for reproducibility/stability
+#     overlap_strings = sorted(uniq)
+
+#     # Embed
+#     # model: must expose .encode(list[str], convert_to_numpy=True/False)
+#     # e.g., SentenceTransformer("sentence-transformers/LaBSE")
+#     if hasattr(model, "encode"):
+#         embs = model.encode(
+#             overlap_strings,
+#             batch_size=batch_size,
+#             convert_to_numpy=True
+#         )
+#     else:
+#         raise RuntimeError("Provided model has no .encode(list[str]) method.")
+
+#     embs = np.asarray(embs, dtype=np.float32)
+#     if normalize:
+#         # match the rest of the pipeline which expects unit vectors
+#         norms = np.linalg.norm(embs, axis=1, keepdims=True) + 1e-12
+#         embs = embs / norms
+
+#     sent2line = {s: i for i, s in enumerate(overlap_strings)}
+#     return sent2line, embs
 
 
 def append_slant(path, xwidth, ywidth):

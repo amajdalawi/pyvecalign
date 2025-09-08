@@ -36,6 +36,76 @@ from dp_utils import make_alignment_types, make_one_to_many_alignment_types, pri
 
 from score import score_multiple, log_final_scores
 
+# vecalign.py
+from dp_utils import  build_embed_index_from_memory
+
+
+def align_in_memory(
+    src_lines, tgt_lines,
+    model,                         # e.g., SentenceTransformer("sentence-transformers/LaBSE")
+    alignment_max_size=4,          # as in CLI --alignment_max_size
+    one_to_many=None,              # same semantics as --one_to_many (int or None)
+    del_percentile_frac=0.2,
+    search_buffer_size=5,
+    max_size_full_dp=300,
+    costs_sample_size=20000,
+    num_samps_for_norm=100,
+):
+    """
+    End-to-end in-memory alignment. Returns (alignments, scores).
+    """
+    # choose overlap depths for each side
+    src_max_alignment_size = 1 if one_to_many is not None else alignment_max_size
+    tgt_max_alignment_size = one_to_many if one_to_many is not None else alignment_max_size
+
+    # # Build per-document embedding indices from memory (no files!)
+    # src_sent2line, src_line_embeddings = build_embed_index_from_memory(
+    #     lines=src_lines, model=model, num_overlaps=src_max_alignment_size
+    # )
+    # tgt_sent2line, tgt_line_embeddings = build_embed_index_from_memory(
+    #     lines=tgt_lines, model=model, num_overlaps=tgt_max_alignment_size
+    # )
+
+    device = "cuda"  # you’ve fixed your install, so this should be True now
+
+    src_sent2line, src_line_embeddings = build_embed_index_from_memory(
+        src_lines, model, num_overlaps=src_max_alignment_size,
+        device=device, batch_size=128
+    )
+    tgt_sent2line, tgt_line_embeddings = build_embed_index_from_memory(
+        tgt_lines, model, num_overlaps=tgt_max_alignment_size,
+        device=device, batch_size=128
+)
+
+    # Turn each document into the 3D tensor (overlap, sentence, dim)
+    vecs0 = make_doc_embedding(src_sent2line, src_line_embeddings, src_lines, src_max_alignment_size)
+    vecs1 = make_doc_embedding(tgt_sent2line, tgt_line_embeddings, tgt_lines, tgt_max_alignment_size)
+
+    # Alignment type set (same as CLI)
+    if one_to_many is not None:
+        final_alignment_types = make_one_to_many_alignment_types(one_to_many)
+    else:
+        final_alignment_types = make_alignment_types(alignment_max_size)
+
+    # Search window size
+    from math import ceil
+    width_over2 = ceil(max(src_max_alignment_size, tgt_max_alignment_size) / 2.0) + search_buffer_size
+
+    stack = vecalign(
+        vecs0=vecs0,
+        vecs1=vecs1,
+        final_alignment_types=final_alignment_types,
+        del_percentile_frac=del_percentile_frac,
+        width_over2=width_over2,
+        max_size_full_dp=max_size_full_dp,
+        costs_sample_size=costs_sample_size,
+        num_samps_for_norm=num_samps_for_norm,
+    )
+
+    return stack[0]['final_alignments'], stack[0]['alignment_scores']
+
+
+
 
 def _main():
     # make runs consistent
