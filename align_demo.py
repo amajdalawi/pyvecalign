@@ -264,6 +264,7 @@ At last the time came for the rear nearside tyre, which the chestnut-haired girl
 But they stayed with me for several minutes, twining words of thanks and graceful movements, and their attitude wasn’t entirely theoretical – at least that’s what I tell myself now, a few years on, when I find myself remembering that I did, in the past, have an erotic life. They talked to me about my nationality – French, I don’t think I’d mentioned it – about whether I liked the area, and they particularly wanted to know if I knew of any nice places nearby. In a sense, yes: there was a tapas bar that also served large breakfasts, just opposite my residence. There was also a nightclub a little further off, which one might at a pinch have called nice. There was my place, I would have put them up for at least a night, and I have the feeling (but I may be inventing this in retrospect) that that could have been really nice. But I didn’t say anything about any of that; I gave them a summary, explaining broadly that the region was pleasant (which was true) and that I felt happy there (which was false, and Yuzu’s imminent arrival wasn’t going to make things any better)."""
 
 
+
 # src_lines = src_line.strip().split(".")
 # tgt_lines = tgt_line.strip().split(".")
 
@@ -273,14 +274,33 @@ src_lines = re.split(r'[.,?!;]|\s-\s',src_line)
 tgt_lines= re.split(r'[.,?!;]|\s-\s',tgt_line)
 
 
-src_lines = [normalize_text(x) for x in src_lines if len(re.findall('\w+',x.strip())) != 0]
-tgt_lines = [normalize_text(x) for x in tgt_lines if len(re.findall('\w+',x.strip())) != 0]
+import json
+# src_en = []
+# with open('some_file.json','r') as f:
+#     srcen = json.load(f)
+
+# with open('some_file2.json','r') as f:
+#     srcfr = json.load(f)
+
+# print(srcfr)
+
+# print(srcen)
+
+with open('fr_novel.json','r') as f:
+    book_dict_fr = json.load(f)
+
+with open('en_novel.json','r') as f:
+    book_dict_en = json.load(f)
+
+
+src_lines = [normalize_text(x) for x in book_dict_fr['006.html'] if len(re.findall('\w+',x.strip())) != 0]
+tgt_lines = [normalize_text(x) for x in book_dict_en['chapter003.xhtml'] if len(re.findall('\w+',x.strip())) != 0]
 
 # ---- Run alignment ----
 alignments, scores = align_in_memory(
     src_lines, tgt_lines,
     model=enc,              # <--- pass model here
-    alignment_max_size=8,
+    alignment_max_size=10,
     one_to_many=None
 )
 
