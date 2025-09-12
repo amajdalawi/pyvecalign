@@ -285,17 +285,47 @@ import json
 # print(srcfr)
 
 # print(srcen)
+PUNCT_ONLY = r"""[!"'()*,\-./:;?«»–—’…]+"""
 
-with open('fr_novel.json','r') as f:
-    book_dict_fr = json.load(f)
+with open('pt_novel.json','r',encoding='utf8') as f:
+    book_dict_pt = json.load(f)
 
-with open('en_novel.json','r') as f:
+with open('resources/en_novel.json','r') as f:
     book_dict_en = json.load(f)
 
 
-src_lines = [normalize_text(x) for x in book_dict_fr['006.html'] if len(re.findall('\w+',x.strip())) != 0]
-tgt_lines = [normalize_text(x) for x in book_dict_en['chapter003.xhtml'] if len(re.findall('\w+',x.strip())) != 0]
+# src_lines = [normalize_text(x) for x in book_dict_pt['Le silence de la Terre_split_003.htm'] + book_dict_fr['Le silence de la Terre_split_004.htm'] if len(re.findall('\w+',x.strip())) != 0]
+# tgt_lines = [normalize_text(x) for x in book_dict_en['Out_of_the_Silent_Planet_split_003.html'] if len(re.findall('\w+',x.strip())) != 0]
 
+src_lines = []
+tgt_lines = []
+
+with open('section_alignment_pt_nl.json','r',encoding='utf8') as f:
+    aligned_sections = json.load(f)
+    aligned_sections = aligned_sections['alignment']
+    for k in aligned_sections.keys():
+        src_lines = src_lines +  [normalize_text(x) for x in book_dict_en[k] if len(re.findall('\w+',x.strip())) != 0]
+        if len(aligned_sections[k]['nl_sections']) != 0:
+            tgt_lines = tgt_lines +  [normalize_text(x) for x in book_dict_pt[aligned_sections[k]['nl_sections'][0]] if len(re.findall('\w+',x.strip())) != 0]
+        # aligned_sections[k]['nl_sections']
+    
+
+
+# src_lines = [
+#     normalize_text(piece.strip())
+#     for x in book_dict_fr['Le silence de la Terre_split_003.htm'] + book_dict_fr['Le silence de la Terre_split_004.htm']
+#     if re.search(r'\w', x)                 # keep lines that have at least one word char
+#     for piece in re.split(PUNCT_ONLY, x)   # split on any run of the punctuation above
+#     if piece.strip()                       # drop empties / pure whitespace
+# ]
+
+# tgt_lines = [
+#     normalize_text(piece.strip())
+#     for x in book_dict_en['Out_of_the_Silent_Planet_split_003.html']
+#     if re.search(r'\w', x)                 # keep lines that have at least one word char
+#     for piece in re.split(PUNCT_ONLY, x)   # split on any run of the punctuation above
+#     if piece.strip()                       # drop empties / pure whitespace
+# ]
 # ---- Run alignment ----
 alignments, scores = align_in_memory(
     src_lines, tgt_lines,
