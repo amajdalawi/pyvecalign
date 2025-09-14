@@ -287,8 +287,8 @@ import json
 # print(srcen)
 PUNCT_ONLY = r"""[!"'()*,\-./:;?«»–—’…]+"""
 
-with open('pt_novel.json','r',encoding='utf8') as f:
-    book_dict_pt = json.load(f)
+with open('resources/fr_novel.json','r',encoding='utf8') as f:
+    book_dict_fr = json.load(f)
 
 with open('resources/en_novel.json','r') as f:
     book_dict_en = json.load(f)
@@ -300,13 +300,13 @@ with open('resources/en_novel.json','r') as f:
 src_lines = []
 tgt_lines = []
 
-with open('section_alignment_pt_nl.json','r',encoding='utf8') as f:
+with open('section_alignment_fr_en.json','r',encoding='utf8') as f:
     aligned_sections = json.load(f)
     aligned_sections = aligned_sections['alignment']
     for k in aligned_sections.keys():
         src_lines = src_lines +  [normalize_text(x) for x in book_dict_en[k] if len(re.findall('\w+',x.strip())) != 0]
         if len(aligned_sections[k]['nl_sections']) != 0:
-            tgt_lines = tgt_lines +  [normalize_text(x) for x in book_dict_pt[aligned_sections[k]['nl_sections'][0]] if len(re.findall('\w+',x.strip())) != 0]
+            tgt_lines = tgt_lines +  [normalize_text(x) for x in book_dict_fr[aligned_sections[k]['nl_sections'][0]] if len(re.findall('\w+',x.strip())) != 0]
         # aligned_sections[k]['nl_sections']
     
 
