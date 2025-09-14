@@ -95,7 +95,7 @@ def encode_means(encoder: OnnxSentenceEncoder, sections: Dict[str, List[str]]) -
         paras = sections[k]
         if not paras:
             means.append(None); continue
-        embs = encoder.encode(paras, batch_size=128, normalize_embeddings=True)
+        embs = encoder.encode(paras, normalize_embeddings=True)
         means.append(embs.mean(axis=0))
     dim = means[0].shape[0] if means and means[0] is not None else 384
     fixed = [m if m is not None else np.zeros((dim,), dtype=np.float32) for m in means]
@@ -349,6 +349,10 @@ def main():
     ap.add_argument("--use_spacy_split", action="store_true", help="Use spaCy-based sentence splitting (slower, more accurate).")
     ap.add_argument("--src_lang", default="en", help="Language code for source (spaCy mode): en|fr|nl|…")
     ap.add_argument("--tr_lang",  default="fr", help="Language code for target (spaCy mode): en|fr|nl|…")
+    ap.add_argument("--gpu_id", type=int, default=0)
+    ap.add_argument("--batch_size", type=int, default=64)
+    ap.add_argument("--max_seq_len", type=int, default=256)
+    ap.add_argument("--prefer_int8", action="store_true")  # INT8 also runs on CUDA in ORT
     args = ap.parse_args()
 
     # Load chapters
@@ -363,13 +367,16 @@ def main():
         tr_chap = epub_to_chapter_dict(args.tr_epub)
 
     # Encoder
-    enc = OnnxSentenceEncoder(
-        args.model_dir,
-        providers=("CUDAExecutionProvider","CPUExecutionProvider"),
-        max_seq_length=256, prefer_int8=False
-    )
 
-    # Chapter mapping
+    # create encoder (GPU only)
+    enc = OnnxSentenceEncoder(
+        r".\models\miniLM-L12",   # folder containing model.onnx (and optionally /onnx/model_qint8*.onnx)
+        gpu_id=0,
+        max_seq_length=256,
+        default_batch_size=64,
+        prefer_int8=False,        # usually prefer FP model on CUDA
+        enable_cuda_graph=False   # leave off on consumer GPUs
+)    # Chapter mapping
     if args.map_json and Path(args.map_json).exists():
         mapping = json.loads(Path(args.map_json).read_text(encoding="utf-8"))
         en_order = mapping.get("en_order", list(mapping["alignment"].keys()))
