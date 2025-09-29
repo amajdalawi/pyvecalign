@@ -1,0 +1,426 @@
+{
+  "model": "distiluse-base-multilingual-cased-v2",
+  "gap_penalty": -0.25,
+  "english_file": "en_novel.json",
+  "dutch_file": "pt_novel.json",
+  "alignment": {
+    "chapter001.xhtml": {
+      "nl_sections": [
+        "text/part0006.html"
+      ],
+      "similarity": 0.918
+    },
+    "part001.xhtml": {
+      "nl_sections": [
+        "text/part0007.html"
+      ],
+      "similarity": 0.634
+    },
+    "chapter002.xhtml": {
+      "nl_sections": [
+        "text/part0008.html"
+      ],
+      "similarity": 0.898
+    },
+    "part002.xhtml": {
+      "nl_sections": [],
+      "similarity": null
+    },
+    "chapter003.xhtml": {
+      "nl_sections": [
+        "text/part0009.html"
+      ],
+      "similarity": 0.906
+    },
+    "chapter004.xhtml": {
+      "nl_sections": [
+        "text/part0010.html"
+      ],
+      "similarity": 0.936
+    },
+    "chapter005.xhtml": {
+      "nl_sections": [
+        "text/part0011.html"
+      ],
+      "similarity": 0.943
+    },
+    "chapter006.xhtml": {
+      "nl_sections": [
+        "text/part0012.html"
+      ],
+      "similarity": 0.904
+    },
+    "chapter007.xhtml": {
+      "nl_sections": [
+        "text/part0013.html"
+      ],
+      "similarity": 0.901
+    },
+    "chapter008.xhtml": {
+      "nl_sections": [
+        "text/part0014.html"
+      ],
+      "similarity": 0.93
+    },
+    "chapter009.xhtml": {
+      "nl_sections": [
+        "text/part0015.html"
+      ],
+      "similarity": 0.909
+    },
+    "chapter010.xhtml": {
+      "nl_sections": [
+        "text/part0016.html"
+      ],
+      "similarity": 0.939
+    },
+    "chapter011.xhtml": {
+      "nl_sections": [
+        "text/part0017.html"
+      ],
+      "similarity": 0.911
+    },
+    "chapter012.xhtml": {
+      "nl_sections": [
+        "text/part0018.html"
+      ],
+      "similarity": 0.918
+    },
+    "chapter013.xhtml": {
+      "nl_sections": [
+        "text/part0019.html"
+      ],
+      "similarity": 0.935
+    },
+    "chapter014.xhtml": {
+      "nl_sections": [
+        "text/part0020.html"
+      ],
+      "similarity": 0.941
+    },
+    "chapter015.xhtml": {
+      "nl_sections": [
+        "text/part0021.html"
+      ],
+      "similarity": 0.939
+    },
+    "chapter016.xhtml": {
+      "nl_sections": [
+        "text/part0022.html"
+      ],
+      "similarity": 0.889
+    },
+    "chapter017.xhtml": {
+      "nl_sections": [
+        "text/part0023.html"
+      ],
+      "similarity": 0.929
+    },
+    "chapter018.xhtml": {
+      "nl_sections": [
+        "text/part0024.html"
+      ],
+      "similarity": 0.937
+    },
+    "chapter019.xhtml": {
+      "nl_sections": [
+        "text/part0025.html"
+      ],
+      "similarity": 0.938
+    },
+    "chapter020.xhtml": {
+      "nl_sections": [
+        "text/part0027.html"
+      ],
+      "similarity": 0.942
+    },
+    "chapter021.xhtml": {
+      "nl_sections": [
+        "text/part0028.html"
+      ],
+      "similarity": 0.927
+    },
+    "chapter022.xhtml": {
+      "nl_sections": [
+        "text/part0029.html"
+      ],
+      "similarity": 0.916
+    },
+    "chapter023.xhtml": {
+      "nl_sections": [
+        "text/part0030.html"
+      ],
+      "similarity": 0.929
+    },
+    "chapter024.xhtml": {
+      "nl_sections": [
+        "text/part0031.html"
+      ],
+      "similarity": 0.915
+    },
+    "chapter025.xhtml": {
+      "nl_sections": [
+        "text/part0032.html"
+      ],
+      "similarity": 0.932
+    },
+    "chapter026.xhtml": {
+      "nl_sections": [
+        "text/part0033.html"
+      ],
+      "similarity": 0.896
+    },
+    "chapter027.xhtml": {
+      "nl_sections": [
+        "text/part0034.html"
+      ],
+      "similarity": 0.931
+    },
+    "chapter028.xhtml": {
+      "nl_sections": [
+        "text/part0035.html"
+      ],
+      "similarity": 0.912
+    },
+    "chapter029.xhtml": {
+      "nl_sections": [
+        "text/part0036.html"
+      ],
+      "similarity": 0.922
+    },
+    "chapter030.xhtml": {
+      "nl_sections": [
+        "text/part0037.html"
+      ],
+      "similarity": 0.938
+    },
+    "chapter031.xhtml": {
+      "nl_sections": [
+        "text/part0038.html"
+      ],
+      "similarity": 0.887
+    },
+    "chapter032.xhtml": {
+      "nl_sections": [
+        "text/part0039.html"
+      ],
+      "similarity": 0.927
+    },
+    "chapter033.xhtml": {
+      "nl_sections": [
+        "text/part0040.html"
+      ],
+      "similarity": 0.921
+    },
+    "chapter034.xhtml": {
+      "nl_sections": [
+        "text/part0041.html"
+      ],
+      "similarity": 0.914
+    },
+    "chapter035.xhtml": {
+      "nl_sections": [
+        "text/part0042.html"
+      ],
+      "similarity": 0.927
+    },
+    "chapter036.xhtml": {
+      "nl_sections": [
+        "text/part0043.html"
+      ],
+      "similarity": 0.92
+    },
+    "chapter037.xhtml": {
+      "nl_sections": [
+        "text/part0044.html"
+      ],
+      "similarity": 0.957
+    },
+    "chapter038.xhtml": {
+      "nl_sections": [
+        "text/part0045.html"
+      ],
+      "similarity": 0.919
+    },
+    "chapter039.xhtml": {
+      "nl_sections": [
+        "text/part0046.html"
+      ],
+      "similarity": 0.928
+    },
+    "chapter040.xhtml": {
+      "nl_sections": [
+        "text/part0047.html"
+      ],
+      "similarity": 0.931
+    },
+    "chapter041.xhtml": {
+      "nl_sections": [
+        "text/part0048.html"
+      ],
+      "similarity": 0.931
+    },
+    "chapter042.xhtml": {
+      "nl_sections": [
+        "text/part0049.html"
+      ],
+      "similarity": 0.898
+    },
+    "chapter043.xhtml": {
+      "nl_sections": [
+        "text/part0050.html"
+      ],
+      "similarity": 0.884
+    },
+    "chapter044.xhtml": {
+      "nl_sections": [
+        "text/part0051.html"
+      ],
+      "similarity": 0.914
+    },
+    "chapter045.xhtml": {
+      "nl_sections": [
+        "text/part0052.html"
+      ],
+      "similarity": 0.945
+    },
+    "chapter046.xhtml": {
+      "nl_sections": [
+        "text/part0053.html"
+      ],
+      "similarity": 0.902
+    },
+    "personblurb.xhtml": {
+      "nl_sections": [
+        "text/part0056.html"
+      ],
+      "similarity": 0.709
+    },
+    "praise.xhtml": {
+      "nl_sections": [
+        "text/part0057.html"
+      ],
+      "similarity": 0.396
+    },
+    "welcome.xhtml": {
+      "nl_sections": [
+        "text/part0059.html"
+      ],
+      "similarity": 0.442
+    }
+  },
+  "en_order": [
+    "chapter001.xhtml",
+    "part001.xhtml",
+    "chapter002.xhtml",
+    "part002.xhtml",
+    "chapter003.xhtml",
+    "chapter004.xhtml",
+    "chapter005.xhtml",
+    "chapter006.xhtml",
+    "chapter007.xhtml",
+    "chapter008.xhtml",
+    "chapter009.xhtml",
+    "chapter010.xhtml",
+    "chapter011.xhtml",
+    "chapter012.xhtml",
+    "chapter013.xhtml",
+    "chapter014.xhtml",
+    "chapter015.xhtml",
+    "chapter016.xhtml",
+    "chapter017.xhtml",
+    "chapter018.xhtml",
+    "chapter019.xhtml",
+    "chapter020.xhtml",
+    "chapter021.xhtml",
+    "chapter022.xhtml",
+    "chapter023.xhtml",
+    "chapter024.xhtml",
+    "chapter025.xhtml",
+    "chapter026.xhtml",
+    "chapter027.xhtml",
+    "chapter028.xhtml",
+    "chapter029.xhtml",
+    "chapter030.xhtml",
+    "chapter031.xhtml",
+    "chapter032.xhtml",
+    "chapter033.xhtml",
+    "chapter034.xhtml",
+    "chapter035.xhtml",
+    "chapter036.xhtml",
+    "chapter037.xhtml",
+    "chapter038.xhtml",
+    "chapter039.xhtml",
+    "chapter040.xhtml",
+    "chapter041.xhtml",
+    "chapter042.xhtml",
+    "chapter043.xhtml",
+    "chapter044.xhtml",
+    "chapter045.xhtml",
+    "chapter046.xhtml",
+    "personblurb.xhtml",
+    "praise.xhtml",
+    "welcome.xhtml"
+  ],
+  "nl_order": [
+    "text/part0001.html",
+    "text/part0003.html",
+    "text/part0004.html",
+    "text/part0005.html",
+    "text/part0006.html",
+    "text/part0007.html",
+    "text/part0008.html",
+    "text/part0009.html",
+    "text/part0010.html",
+    "text/part0011.html",
+    "text/part0012.html",
+    "text/part0013.html",
+    "text/part0014.html",
+    "text/part0015.html",
+    "text/part0016.html",
+    "text/part0017.html",
+    "text/part0018.html",
+    "text/part0019.html",
+    "text/part0020.html",
+    "text/part0021.html",
+    "text/part0022.html",
+    "text/part0023.html",
+    "text/part0024.html",
+    "text/part0025.html",
+    "text/part0026.html",
+    "text/part0027.html",
+    "text/part0028.html",
+    "text/part0029.html",
+    "text/part0030.html",
+    "text/part0031.html",
+    "text/part0032.html",
+    "text/part0033.html",
+    "text/part0034.html",
+    "text/part0035.html",
+    "text/part0036.html",
+    "text/part0037.html",
+    "text/part0038.html",
+    "text/part0039.html",
+    "text/part0040.html",
+    "text/part0041.html",
+    "text/part0042.html",
+    "text/part0043.html",
+    "text/part0044.html",
+    "text/part0045.html",
+    "text/part0046.html",
+    "text/part0047.html",
+    "text/part0048.html",
+    "text/part0049.html",
+    "text/part0050.html",
+    "text/part0051.html",
+    "text/part0052.html",
+    "text/part0053.html",
+    "text/part0054.html",
+    "text/part0055_split_000.html",
+    "text/part0055_split_001.html",
+    "text/part0056.html",
+    "text/part0057.html",
+    "text/part0058.html",
+    "text/part0059.html"
+  ]
+}

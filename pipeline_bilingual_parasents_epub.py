@@ -420,7 +420,7 @@ def main():
     # 2) Encoder
     enc = OnnxSentenceEncoder(
         args.model_dir,
-        providers=("CUDAExecutionProvider", "CPUExecutionProvider"),
+        # providers=("CUDAExecutionProvider", "CPUExecutionProvider"),
         max_seq_length=256,
         prefer_int8=False
     )

@@ -77,6 +77,7 @@ def html_to_paras(xhtml: bytes | str) -> Tuple[str, List[str]]:
     return title, paras
 
 def epub_to_chapter_dict(epub_path: Path) -> Dict[str, List[str]]:
+    print(f"[epub] extracting from {epub_path} …")
     book = epub.read_epub(str(epub_path))
     raw: Dict[str, List[str]] = {}
     for item in book.get_items_of_type(ebooklib.ITEM_DOCUMENT):
